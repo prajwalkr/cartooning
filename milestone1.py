@@ -24,21 +24,22 @@ def detect_egdes(img, edge_min, edge_max):
 	edges = cv2.Canny(img, edge_min, edge_max)
 	return edges
 
-parser = argparse.ArgumentParser(description='Milestone 1 progress')
-parser.add_argument('input', help='Input image')
-parser.add_argument('-l', '--l', required=False, default=180, type=int)
-parser.add_argument('-r', '--r', required=False, default=100, type=int)
+if __name__ == '__main__':
+	parser = argparse.ArgumentParser(description='Milestone 1 progress')
+	parser.add_argument('input', help='Input image')
+	parser.add_argument('-l', '--l', required=False, default=180, type=int)
+	parser.add_argument('-r', '--r', required=False, default=100, type=int)
 
-args = parser.parse_args()
-    
-# Read the input image and display
-img = read_input(args.input)
-display_image(img)
+	args = parser.parse_args()
+	    
+	# Read the input image and display
+	img = read_input(args.input)
+	display_image(img)
 
-# Apply median filter to remove the noise and display the images
-median_filtered_img = apply_median_filter(img)
-plotImages(img, median_filtered_img, 'Input image', 'Median filtered image')
+	# Apply median filter to remove the noise and display the images
+	median_filtered_img = apply_median_filter(img)
+	plotImages(img, median_filtered_img, 'Input image', 'Median filtered image')
 
-# Detect the edges in the image and display the images
-edges = detect_egdes(median_filtered_img, args.l, args.r)
-plotImages(median_filtered_img, edges, 'Median filtered image', 'Edge detection')
+	# Detect the edges in the image and display the images
+	edges = detect_egdes(median_filtered_img, args.l, args.r)
+	plotImages(median_filtered_img, edges, 'Median filtered image', 'Edge detection')
