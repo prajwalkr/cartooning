@@ -37,7 +37,7 @@ if __name__ == '__main__':
     plotImages(edges, dilated_img, 'Edge detection', 'Dilated image')
 
     # Apply bilateral filter and display the images
-    bilateral_filtered_img  =apply_bilateral_filter(img)
+    bilateral_filtered_img = apply_bilateral_filter(img)
     plotImages(img, bilateral_filtered_img, 'Input image', 'Bilateral filtered image')
 
     # Apply median filter
