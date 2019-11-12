@@ -1,5 +1,6 @@
 ### Import the necessary libraries
 import cv2
+import numpy as np
 import matplotlib.pyplot as plt
 
 ### Function to read the input image 

@@ -12,7 +12,7 @@ def apply_bilateral_filter(img):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Milestone 1 progress')
+    parser = argparse.ArgumentParser(description='Milestone 3 and 4 progress')
     parser.add_argument('input', help='Input image')
     parser.add_argument('-l', '--edgemin', required=False, default=180, type=int)
     parser.add_argument('-r', '--edgemax', required=False, default=100, type=int)

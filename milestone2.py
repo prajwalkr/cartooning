@@ -1,6 +1,7 @@
 ### Import the necessary libraries
 import argparse
 import numpy as np
+import argparse
 from utils import *
 from milestone1 import apply_median_filter, detect_egdes
 
@@ -17,7 +18,7 @@ def dilation(img, ksize):
     return dilated_img
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Milestone 1 progress')
+    parser = argparse.ArgumentParser(description='Milestone 2 progress')
     parser.add_argument('input', help='Input image')
     parser.add_argument('-l', '--edgemin', required=False, default=180, type=int)
     parser.add_argument('-r', '--edgemax', required=False, default=100, type=int)
