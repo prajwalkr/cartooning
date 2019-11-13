@@ -66,7 +66,7 @@ def get_landmarks(img_or_file, display=True):
 def part_extractor(name='full'):
 	assert name == 'full'
 
-	get_points_within_contour(img, landmarks[:27])
+	mask = get_points_within_contour(img, landmarks[:27])
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='Face landmarks using dlib')

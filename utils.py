@@ -44,11 +44,9 @@ def plotImages(im1, im2, t1, t2):
 
 def get_points_within_contour(img, points):
 	if len(img.shape) > 2: img = img[..., 0]
-	cimg = np.zeros_like(img)
-	cv2.drawContours(cimg, [points], 0, color=255, thickness=-1)
+	mask = np.zeros_like(img)
+	cv2.drawContours(mask, [points], 0, color=255, thickness=-1)
 
-	display_image(cimg)
-	return
-	# Access the image pixels and create a 1D numpy array then add to list
-	# pts = np.where(cimg == 255)
-	# lst_intensities.append(img[pts[0], pts[1]])
+	display_image(mask)
+
+	return mask
