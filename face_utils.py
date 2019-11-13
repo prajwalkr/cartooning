@@ -68,8 +68,12 @@ def part_extractor(name='full'):
 		outline_points = landmarks[:27]
 		ordered = np.concatenate([outline_points[:17], outline_points[22:][::-1],
 									outline_points[18:23][::-1]], axis=0)
-		
+
 		mask = get_points_within_contour(img, ordered)
+	else:
+		raise NotImplementedError('Mask type: {} not implemented yet!'.format(name))
+		
+	return mask
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='Face landmarks using dlib')
