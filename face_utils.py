@@ -64,9 +64,12 @@ def get_landmarks(img_or_file, display=True):
 	return img, crop, shape, box
 
 def part_extractor(name='full'):
-	assert name == 'full'
-
-	mask = get_points_within_contour(img, landmarks[:27])
+	if name == 'full':
+		outline_points = landmarks[:27]
+		ordered = np.concatenate([outline_points[:17], outline_points[22:][::-1],
+									outline_points[18:23][::-1]], axis=0)
+		
+		mask = get_points_within_contour(img, ordered)
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='Face landmarks using dlib')
