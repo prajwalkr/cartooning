@@ -17,6 +17,7 @@ if __name__ == '__main__':
     parser.add_argument('input', help='Input image')
     parser.add_argument('-l', '--edgemin', required=False, default=180, type=int)
     parser.add_argument('-r', '--edgemax', required=False, default=100, type=int)
+    parser.add_argument('--median_kernel_size', required=False, default=3, type=int)
     parser.add_argument('-f', '--dilation_size', required=False, default=2, type=int)
     parser.add_argument('--quantization_factor', required=False, default=24, type=int)
 
@@ -27,7 +28,7 @@ if __name__ == '__main__':
     display_image(img)
 
     # Apply median filter to remove the noise and display the images
-    median_filtered_img = apply_median_filter(img)
+    median_filtered_img = apply_median_filter(img, args.median_kernel_size)
     plotImages(img, median_filtered_img, 'Input image', 'Median filtered image')
 
     # Detect the edges in the image and display the images
@@ -43,7 +44,7 @@ if __name__ == '__main__':
     plotImages(img, bilateral_filtered_img, 'Input image', 'Bilateral filtered image')
 
     # Apply median filter
-    filtered_img = apply_median_filter(bilateral_filtered_img)
+    filtered_img = apply_median_filter(bilateral_filtered_img, args.median_kernel_size)
     plotImages(bilateral_filtered_img, filtered_img, 'Bilateral filtered image', 'Median filtered image')
 
     # Apply qunatization

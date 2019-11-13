@@ -9,8 +9,8 @@ Before any further processing, a median filter is applied in order to reduce any
 that may be present in the input image.
 '''
 # Function to apply median filter
-def apply_median_filter(img):
-	median = cv2.medianBlur(img, 3)
+def apply_median_filter(img, kszie):
+	median = cv2.medianBlur(img, kszie)
 	return median
 
 '''
@@ -27,8 +27,9 @@ def detect_egdes(img, edge_min, edge_max):
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='Milestone 1 progress')
 	parser.add_argument('input', help='Input image')
-	parser.add_argument('-l', '--l', required=False, default=180, type=int)
-	parser.add_argument('-r', '--r', required=False, default=100, type=int)
+	parser.add_argument('-l', '--edgemin', required=False, default=180, type=int)
+	parser.add_argument('-r', '--edgemax', required=False, default=100, type=int)
+	parser.add_argument('--median_kernel_size', required=False, default=3, type=int)
 
 	args = parser.parse_args()
 	    
@@ -37,9 +38,9 @@ if __name__ == '__main__':
 	display_image(img)
 
 	# Apply median filter to remove the noise and display the images
-	median_filtered_img = apply_median_filter(img)
+	median_filtered_img = apply_median_filter(img, args.median_kernel_size)
 	plotImages(img, median_filtered_img, 'Input image', 'Median filtered image')
 
 	# Detect the edges in the image and display the images
-	edges = detect_egdes(median_filtered_img, args.l, args.r)
+	edges = detect_egdes(median_filtered_img, args.edgemin, args.edgemax)
 	plotImages(median_filtered_img, edges, 'Median filtered image', 'Edge detection')
