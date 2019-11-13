@@ -60,7 +60,13 @@ def get_landmarks(img_or_file, display=True):
 
 	plotImages(img, output, 'Input image', 'Face with landmarks')
 
-	return shape, box
+	crop = img[box.top() : box.bottom(), box.left() : box.right()]
+	return img, crop, shape, box
+
+def part_extractor(name='full'):
+	assert name == 'full'
+
+	get_points_within_contour(img, landmarks[:27])
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='Face landmarks using dlib')
@@ -68,4 +74,6 @@ if __name__ == '__main__':
 
 	args = parser.parse_args()
 
-	landmarks, box = get_landmarks(args.input)
+	img, face, landmarks, box = get_landmarks(args.input)
+
+	part_extractor()	
