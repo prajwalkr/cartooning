@@ -78,6 +78,10 @@ def part_extractor(name='full'):
 	elif name == 'lefteye':
 		outline_points = landmarks[36:42]
 		mask = get_points_within_contour(img, outline_points)
+
+	elif name == 'righteye':
+		outline_points = landmarks[42:48]
+		mask = get_points_within_contour(img, outline_points)
 		
 	else:
 		raise NotImplementedError('Mask type: {} not implemented yet!'.format(name))
