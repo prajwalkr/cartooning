@@ -70,17 +70,21 @@ def part_extractor(name='full'):
 									outline_points[18:23][::-1]], axis=0)
 
 		mask = get_points_within_contour(img, ordered)
+	elif name == 'lip':
+		outline_points = landmarks[48:]
+
+		mask = get_points_within_contour(img, outline_points)
 	else:
 		raise NotImplementedError('Mask type: {} not implemented yet!'.format(name))
-		
+
 	return mask
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='Face landmarks using dlib')
 	parser.add_argument('input', help='Input image')
-
+	parser.add_argument('-p', '--part', help='Part you want to segment', default='full')
 	args = parser.parse_args()
 
 	img, face, landmarks, box = get_landmarks(args.input)
 
-	part_extractor()	
+	part_extractor(args.part)	
