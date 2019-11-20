@@ -42,11 +42,17 @@ def plotImages(im1, im2, t1, t2):
 
 	return
 
-def get_points_within_contour(img, points):
-	if len(img.shape) > 2: img = img[..., 0]
+def get_points_within_contour(img, points, display=False):
+	if len(img.shape) > 2:
+		img = img[..., 0]
+		expand_dims = True
+
 	mask = np.zeros_like(img)
 	cv2.drawContours(mask, [points], 0, color=255, thickness=-1)
 
-	display_image(mask)
+	if display: display_image(mask)
 
-	return mask
+	if expand_dims:
+		mask = np.expand_dims(mask, axis=2)
+
+	return mask // 255

@@ -37,7 +37,7 @@ def shape_to_np(shape, dtype="int"):
 	return coords
 
 
-def get_landmarks(img_or_file, display=True):
+def get_landmarks(img_or_file, display=False):
 	if type(img_or_file) == str:
 		img = dlib.load_rgb_image(img_or_file)
 	else:
@@ -61,30 +61,30 @@ def get_landmarks(img_or_file, display=True):
 	for (x, y) in shape:
 		cv2.circle(output, (x, y), 1, (0, 0, 255), -1)
 
-	plotImages(img, output, 'Input image', 'Face with landmarks')
+	if display: plotImages(img, output, 'Input image', 'Face with landmarks')
 
 	crop = img[box.top() : box.bottom(), box.left() : box.right()]
 	return img, crop, shape, box
 
-def part_extractor(img, name='full'):
+def part_extractor(img, landmarks, name='full', display=False):
 	if name == 'full':
 		outline_points = landmarks[:27]
 		ordered = np.concatenate([outline_points[:17], outline_points[22:][::-1],
 									outline_points[18:23][::-1]], axis=0)
 
-		mask = get_points_within_contour(img, ordered)
+		mask = get_points_within_contour(img, ordered, display)
 
 	elif name == 'lip':
 		outline_points = landmarks[48:]
-		mask = get_points_within_contour(img, outline_points)
+		mask = get_points_within_contour(img, outline_points, display)
 
 	elif name == 'lefteye':
 		outline_points = landmarks[36:42]
-		mask = get_points_within_contour(img, outline_points)
+		mask = get_points_within_contour(img, outline_points, display)
 
 	elif name == 'righteye':
 		outline_points = landmarks[42:48]
-		mask = get_points_within_contour(img, outline_points)
+		mask = get_points_within_contour(img, outline_points, display)
 		
 	else:
 		raise NotImplementedError('Mask type: {} not implemented yet!'.format(name))
@@ -95,13 +95,11 @@ if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='Face landmarks using dlib')
 	parser.add_argument('input', help='Input image')
 	parser.add_argument('-p', '--part', help='Part you want to segment', default='full')
-	parser.add_argument('-c', '--cluster_size', required=False, default=4, type = int, help='Number of clusters')
 	args = parser.parse_args()
 
-	img, face, landmarks, box = get_landmarks(args.input)
+	img, face, landmarks, box = get_landmarks(args.input, display=True)
 
 	if(face is not None):
-		mask = part_extractor(img, args.part)	
-		img[box.top() : box.bottom(), box.left() : box.right()]
+		mask = part_extractor(img, args.part, display=True)	
 	else:
 		print('No faces found')

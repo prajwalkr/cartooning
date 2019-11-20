@@ -5,10 +5,7 @@ from utils import *
 from face_utils import *
 from sklearn.cluster import MiniBatchKMeans
 
-
 def apply_texture_face(img, num_clusters):
-
-	img = read_input(img)
 	(h, w) = img.shape[:2]
 
 	# Convert the image to LAB color space. This is required for KMeans which is applied for clutering. 
@@ -33,6 +30,29 @@ def apply_texture_face(img, num_clusters):
 
 	return face_img
 
+def toonify_masked_face(args, input_img=None, display=False):
+	img, face, landmarks, box = get_landmarks((args.input if input_img is None else input_img))
+
+	if(face is not None):
+		mask = part_extractor(img, landmarks, args.part)	
+		mask_crop = mask[box.top() : box.bottom(), box.left() : box.right()]
+
+		face_img = face * mask_crop
+		
+		cartooned = apply_texture_face(face_img, args.cluster_size)
+
+		blank_img_with_cartoon_face = img.copy()
+		blank_img_with_cartoon_face[box.top() : box.bottom(), box.left() : box.right()] = cartooned
+
+		img_with_cartoon_face = img * (1 - mask) + blank_img_with_cartoon_face * mask
+
+		if display: display_image(img_with_cartoon_face)
+		return img
+
+	else:
+		print('No faces found.')
+		return input_img
+
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='Face landmarks using dlib')
 	parser.add_argument('input', help='Input image')
@@ -40,14 +60,4 @@ if __name__ == '__main__':
 	parser.add_argument('-c', '--cluster_size', required=False, default=4, type = int, help='Number of clusters')
 	args = parser.parse_args()
 
-	img, face, landmarks, box = get_landmarks(args.input)
-
-	if(face is not None):
-		mask = part_extractor(img, args.part)	
-
-		img[box.top() : box.bottom(), box.left() : box.right()]
-
-		display_image(face_img)
-
-	else:
-		print('No faces found')
+	toonify_masked_face(args, display=True)
