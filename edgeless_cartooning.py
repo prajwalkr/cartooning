@@ -15,7 +15,7 @@ def generate_color_image(img, median_kernel_size, quantization_factor):
     filtered_img = apply_median_filter(bilateral_filtered_img, median_kernel_size)
 
     color_img = quantize_colors(filtered_img, quantization_factor)
-        
+    
     return color_img
 
 def highboost(img, k):

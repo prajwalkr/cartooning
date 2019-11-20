@@ -6,9 +6,6 @@ from face_utils import *
 
 def apply_texture_face(img, num_clusters, display=False):
 	clustered_img = KMeansClustering(img, num_clusters)
-	 
-	# Convert from LAB to RGB
-	face_img = cv2.cvtColor(clustered_img, cv2.COLOR_LAB2RGB)
 
 	if display: display_image(face_img)
 

@@ -87,4 +87,7 @@ def KMeansClustering(img, n_clusters):
     # Reshape the feature vectors to images
     clustered_img = clustered_img.reshape((h, w, 3))
 
-    return clustered_img
+    # Convert from LAB to RGB
+    img = cv2.cvtColor(clustered_img, cv2.COLOR_LAB2RGB)
+
+    return img
