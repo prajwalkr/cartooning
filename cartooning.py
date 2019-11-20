@@ -5,6 +5,7 @@ from milestone2 import dilation
 from milestone3_and_4 import apply_bilateral_filter
 from milestone5 import quantize_colors
 from milestone6 import merge_images
+from face_cartooning import toonify_face
 
 # Combine all these functions to compute the results of step 1
 def generate_edge_image(path, median_kernel_size, edge_min, edge_max, dilation_size):
@@ -38,13 +39,19 @@ if __name__ == '__main__':
     parser.add_argument('-f', '--dilation_size', required=False, default=2, type=int)
     parser.add_argument('-q', '--quantization_factor', required=False, default=24, type=int)
 
+    #### Arguments for Face-specific improvements
+    parser.add_argument('-p', '--part', required=False, help='Part you want to segment', default='full')
+    parser.add_argument('-c', '--cluster_size', required=False, default=4, type = int, help='Number of clusters')
+
     args = parser.parse_args()
 
     img, edge_img = generate_edge_image(args.input, args.median_kernel_size, args.edgemin, args.edgemax, args.dilation_size)
 
     color_img = generate_color_image(img, args.median_kernel_size, args.quantization_factor)
 
-    output = merge_images(edge_img, color_img)
+    basic_cartooned_output = merge_images(edge_img, color_img)
 
-    # Disply the input and the cartooned image
-    plotImages(img, output, 'Input image', 'Output (Cartooned) image')
+    # Display the input and the cartooned image
+    plotImages(img, basic_cartooned_output, 'Input image', 'Output (Cartooned) image before Face processing')
+
+    toonify_face(args, basic_cartooned_output, display=True)

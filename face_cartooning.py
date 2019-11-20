@@ -30,8 +30,11 @@ def apply_texture_face(img, num_clusters):
 
 	return face_img
 
-def toonify_masked_face(args, input_img=None, display=False):
-	img, face, landmarks, box = get_landmarks((args.input if input_img is None else input_img))
+def toonify_face(args, input_img=None, display=False):
+	img, face, landmarks, box = get_landmarks(args.input)
+
+	if input_img is not None:
+		img = input_img
 
 	if(face is not None):
 		mask = part_extractor(img, landmarks, args.part)	
@@ -60,4 +63,4 @@ if __name__ == '__main__':
 	parser.add_argument('-c', '--cluster_size', required=False, default=4, type = int, help='Number of clusters')
 	args = parser.parse_args()
 
-	toonify_masked_face(args, display=True)
+	toonify_face(args, display=True)
