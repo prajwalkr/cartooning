@@ -7,18 +7,6 @@ from milestone5 import quantize_colors
 from milestone6 import merge_images
 from face_cartooning import toonify_face
 
-# Combine all these functions to compute the results of step 1
-def generate_edge_image(path, median_kernel_size, edge_min, edge_max, dilation_size):
-    img = read_input(path)
-
-    median_filtered_img = apply_median_filter(img, median_kernel_size)
-
-    edges = detect_egdes(median_filtered_img, edge_min, edge_max)
-
-    edge_img = dilation(edges, dilation_size)
-
-    return img, edge_img
-
 # Combine the steps to generate the results of step 2
 def generate_color_image(img, median_kernel_size, quantization_factor):
 
