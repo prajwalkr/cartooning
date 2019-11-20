@@ -3,28 +3,9 @@ import argparse
 import numpy as np
 from utils import *
 from face_utils import *
-from sklearn.cluster import MiniBatchKMeans
 
 def apply_texture_face(img, num_clusters, display=False):
-	(h, w) = img.shape[:2]
-
-	# Convert the image to LAB color space. This is required for KMeans which is applied for clutering. 
-	# The KMeans uses Euclidean distance and the Euclidean distance in LAB color space 
-	# implies perceptul meaning.
-	img = cv2.cvtColor(img, cv2.COLOR_RGB2LAB)
-	 
-	# Reshape the image into a feature vector to apply k-means
-	img = img.reshape((img.shape[0] * img.shape[1], 3))
-	 
-	# Apply KMeans using the specified number of clusters 
-	kmeans = MiniBatchKMeans(n_clusters = num_clusters)
-	labels = kmeans.fit_predict(img)
-
-	# Generate the quantized image based on the predictions
-	clustered_img = kmeans.cluster_centers_.astype("uint8")[labels]
-	 
-	# Reshape the feature vectors to images
-	clustered_img = clustered_img.reshape((h, w, 3))
+	clustered_img = KMeansClustering(img, num_clusters)
 	 
 	# Convert from LAB to RGB
 	face_img = cv2.cvtColor(clustered_img, cv2.COLOR_LAB2RGB)

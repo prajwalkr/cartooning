@@ -2,6 +2,7 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.cluster import MiniBatchKMeans
 
 ### Function to read the input image 
 def read_input(filename):
@@ -64,3 +65,26 @@ def get_points_within_contour(img, points, display=False):
 		mask = np.expand_dims(mask, axis=2)
 
 	return mask // 255
+
+def KMeansClustering(img, n_clusters):
+    (h, w) = img.shape[:2]
+
+    # Convert the image to LAB color space. This is required for KMeans which is applied for clutering. 
+    # The KMeans uses Euclidean distance and the Euclidean distance in LAB color space 
+    # implies perceptul meaning.
+    img = cv2.cvtColor(img, cv2.COLOR_RGB2LAB)
+     
+    # Reshape the image into a feature vector to apply k-means
+    img = img.reshape((img.shape[0] * img.shape[1], 3))
+     
+    # Apply KMeans using the specified number of clusters 
+    kmeans = MiniBatchKMeans(n_clusters = n_clusters)
+    labels = kmeans.fit_predict(img)
+
+    # Generate the quantized image based on the predictions
+    clustered_img = kmeans.cluster_centers_.astype("uint8")[labels]
+     
+    # Reshape the feature vectors to images
+    clustered_img = clustered_img.reshape((h, w, 3))
+
+    return clustered_img
