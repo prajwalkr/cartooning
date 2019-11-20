@@ -17,6 +17,14 @@ def display_image(img):
 	plt.imshow(img)
 	plt.show()
 
+def renormalize(img):
+    m, M = img.min(), img.max()
+    if M == 0: return img
+
+    img = (255. * ((img - m).astype(np.float32) / (M - m))).astype(np.uint8)
+
+    return img
+
 # Function to plot two images
 def plotImages(im1, im2, t1, t2):
 	
