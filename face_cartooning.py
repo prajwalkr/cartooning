@@ -9,7 +9,8 @@ def apply_texture_face(img, num_clusters, display=False):
 	(h, w) = img.shape[:2]
 
 	# Convert the image to LAB color space. This is required for KMeans which is applied for clutering. 
-	# The KMeans uses Euclidean distance and the Euclidean distance in LAB color space implies perceptul meaning.
+	# The KMeans uses Euclidean distance and the Euclidean distance in LAB color space 
+	# implies perceptul meaning.
 	img = cv2.cvtColor(img, cv2.COLOR_RGB2LAB)
 	 
 	# Reshape the image into a feature vector to apply k-means
