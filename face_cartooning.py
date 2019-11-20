@@ -7,9 +7,9 @@ from face_utils import *
 def apply_texture_face(img, num_clusters, display=False):
 	clustered_img = KMeansClustering(img, num_clusters)
 
-	if display: display_image(face_img)
+	if display: display_image(clustered_img)
 
-	return face_img
+	return clustered_img
 
 def toonify_face(args, input_img=None, display=False):
 	img, face, landmarks, box = get_landmarks(args.input, display=display)

@@ -7,7 +7,7 @@ from sklearn.cluster import MiniBatchKMeans
 
 detector, predictor = None, None 
 
-def init(ckpt='data/shape_predictor_68_face_landmarks.dat'):
+def init(ckpt='data/shape_predictor_81_face_landmarks.dat'):
 	global detector, predictor
 	detector = dlib.get_frontal_face_detector()
 	predictor = dlib.shape_predictor(ckpt)
@@ -26,11 +26,11 @@ def get_max_area(boxes):
 
 def shape_to_np(shape, dtype="int"):
 	# initialize the list of (x, y)-coordinates
-	coords = np.zeros((68, 2), dtype=dtype)
+	coords = np.zeros((81, 2), dtype=dtype)
  
-	# loop over the 68 facial landmarks and convert them
+	# loop over the 81 facial landmarks and convert them
 	# to a 2-tuple of (x, y)-coordinates
-	for i in range(0, 68):
+	for i in range(0, 81):
 		coords[i] = (shape.part(i).x, shape.part(i).y)
  
 	# return the list of (x, y)-coordinates
@@ -56,6 +56,16 @@ def get_landmarks(img_or_file, display=False):
 	shape = shape_to_np(shape)
 
 	output = img.copy()
+
+	top = np.inf
+	for coord in shape:
+		top = min(top, coord[1])
+
+	bottom = -np.inf
+	for coord in shape:
+		bottom = max(bottom, coord[1])
+
+	box = dlib.rectangle(left=box.left(), top=top, right=box.right(), bottom=bottom)
 	cv2.rectangle(output, (box.left(), box.top()), (box.right(), box.bottom()), (0, 255, 0), 2)
 
 	for (x, y) in shape:
@@ -68,9 +78,13 @@ def get_landmarks(img_or_file, display=False):
 
 def part_extractor(img, landmarks, name='full', display=False):
 	if name == 'full':
-		outline_points = landmarks[:27]
-		ordered = np.concatenate([outline_points[:17], outline_points[22:][::-1],
-									outline_points[18:23][::-1]], axis=0)
+		basic = landmarks[:17]
+		forehead_indices = [78, 74, 79, 73, 72, 80, 71,
+							70, 69, 68, 76, 75, 77]
+
+		forehead = np.concatenate([np.expand_dims(landmarks[f], axis=0) for f in forehead_indices])
+
+		ordered = np.concatenate([basic, forehead], axis=0)
 
 		mask = get_points_within_contour(img, ordered, display)
 
