@@ -19,14 +19,13 @@ def toonify_face(args, input_img=None, display=False):
 
 	if(face is not None):
 		mask = part_extractor(img, landmarks, args.part, display=display)	
-		mask_crop = mask[box.top() : box.bottom(), box.left() : box.right()]
+		mask_crop = crop_box(mask, box)
 
 		face_img = face * mask_crop
-		
 		cartooned = apply_texture_face(face_img, args.cluster_size, display=display)
 
 		blank_img_with_cartoon_face = img.copy()
-		blank_img_with_cartoon_face[box.top() : box.bottom(), box.left() : box.right()] = cartooned
+		blank_img_with_cartoon_face[max(box.top(), 0) : box.bottom(), max(box.left(), 0) : box.right()] = cartooned
 
 		img_with_cartoon_face = img * (1 - mask) + blank_img_with_cartoon_face * mask
 

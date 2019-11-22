@@ -73,7 +73,7 @@ def get_landmarks(img_or_file, display=False):
 
 	if display: plotImages(img, output, 'Input image', 'Face with landmarks')
 
-	crop = img[box.top() : box.bottom(), box.left() : box.right()]
+	crop = crop_box(img, box)
 	return img, crop, shape, box
 
 def part_extractor(img, landmarks, name='full', display=False):
@@ -104,6 +104,10 @@ def part_extractor(img, landmarks, name='full', display=False):
 		raise NotImplementedError('Mask type: {} not implemented yet!'.format(name))
 
 	return mask
+
+def crop_box(img, box):
+	crop = img[max(box.top(), 0) : box.bottom(), max(box.left(), 0) : box.right()]
+	return crop
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='Face landmarks using dlib')
