@@ -22,7 +22,7 @@ if __name__ == '__main__':
     parser.add_argument('input', help='Input image')
     parser.add_argument('-l', '--edgemin', required=False, default=180, type=int)
     parser.add_argument('-r', '--edgemax', required=False, default=100, type=int)
-    parser.add_argument('--median_kernel_size', required=False, default=3, type=int)
+    parser.add_argument('-m', '--median_kernel_size', required=False, default=3, type=int)
     parser.add_argument('-f', '--dilation_size', required=False, default=2, type=int)
 
     args = parser.parse_args()

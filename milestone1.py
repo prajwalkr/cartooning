@@ -24,12 +24,23 @@ def detect_egdes(img, edge_min, edge_max):
 	edges = cv2.Canny(img, edge_min, edge_max)
 	return edges
 
+def detect_edges_filtered(img, sigma=0.33):
+	# Compute the median of the single channel pixel intensities
+	v = np.median(img)
+ 
+	# Set lower and upper thresholds of canny using the median
+	lower = int(max(0, (1.0 - sigma) * v))
+	upper = int(min(255, (1.0 + sigma) * v))
+	edged = cv2.Canny(img, lower, upper)
+ 
+	return edged
+
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='Milestone 1 progress')
 	parser.add_argument('input', help='Input image')
 	parser.add_argument('-l', '--edgemin', required=False, default=180, type=int)
 	parser.add_argument('-r', '--edgemax', required=False, default=100, type=int)
-	parser.add_argument('--median_kernel_size', required=False, default=3, type=int)
+	parser.add_argument('-m', '--median_kernel_size', required=False, default=3, type=int)
 
 	args = parser.parse_args()
 	    

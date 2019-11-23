@@ -2,6 +2,7 @@ import argparse
 from utils import *
 from milestone1 import apply_median_filter, detect_egdes
 from milestone2 import dilation
+from milestone3 import remove_small_edges
 
 def apply_bilateral_filter(img):
 	bilateral_filtered_img = img
@@ -36,6 +37,10 @@ if __name__ == '__main__':
     # Dilate the image
     dilated_img = dilation(edges, args.dilation_size)
     plotImages(edges, dilated_img, 'Edge detection', 'Dilated image')
+
+    # Remove small contours in the edges
+    edge_img = remove_small_edges(dilated_img)
+    plotImages(img, edge_img, 'Input image', 'Edge image')
 
     # Apply bilateral filter and display the images
     bilateral_filtered_img = apply_bilateral_filter(img)

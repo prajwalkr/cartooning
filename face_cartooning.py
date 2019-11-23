@@ -41,4 +41,6 @@ if __name__ == '__main__':
 	parser.add_argument('-c', '--cluster_size', required=False, default=8, type = int, help='Number of clusters')
 	args = parser.parse_args()
 
-	toonify_face(args, display=True)
+	cartooned_img = toonify_face(args, display=True)
+
+	plotImages(args.input, cartooned_img, 'Input image', 'Cartooned image')

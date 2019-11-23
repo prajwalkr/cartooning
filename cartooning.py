@@ -1,8 +1,9 @@
 import argparse
 from utils import *
-from milestone1 import apply_median_filter, detect_egdes
+from milestone1 import apply_median_filter, detect_egdes, detect_edges_filtered
 from milestone2 import dilation
-from milestone3_and_4 import apply_bilateral_filter
+from milestone3 import remove_small_edges
+from milestone4 import apply_bilateral_filter
 from milestone5 import quantize_colors
 from milestone6 import merge_images
 from face_cartooning import toonify_face
@@ -13,9 +14,13 @@ def generate_edge_image(path, median_kernel_size, edge_min, edge_max, dilation_s
 
     median_filtered_img = apply_median_filter(img, median_kernel_size)
 
-    edges = detect_egdes(median_filtered_img, edge_min, edge_max)
+    # edges = detect_egdes(median_filtered_img, edge_min, edge_max)
+    edges = detect_edges_filtered(median_filtered_img)
 
-    edge_img = dilation(edges, dilation_size)
+    dilated_img = dilation(edges, dilation_size)
+
+    edge_img = remove_small_edges(dilated_img)
+    #edge_img = dilated_img
 
     return img, edge_img
 
@@ -52,6 +57,6 @@ if __name__ == '__main__':
     basic_cartooned_output = merge_images(edge_img, color_img)
 
     # Display the input and the cartooned image
-    plotImages(img, basic_cartooned_output, 'Input image', 'Output (Cartooned) image before Face processing')
+    plotImages(img, basic_cartooned_output, 'Input image', 'Cartooned image')
 
     toonify_face(args, basic_cartooned_output, display=True)

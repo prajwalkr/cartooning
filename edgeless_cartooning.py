@@ -48,3 +48,5 @@ if __name__ == '__main__':
     display_image(basic_cartooned_output)
 
     img_with_cartoon_face = toonify_face(args, basic_cartooned_output, display=True)
+
+    plotImages(img, img_with_cartoon_face, 'Input image', 'Cartooned image')
