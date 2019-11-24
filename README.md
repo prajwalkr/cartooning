@@ -18,7 +18,7 @@ We build an application to cartoonify a given image using basic image processing
  
 The code takes in an input image path and outputs two cartoon images from the: (i) Original paper implementation (ii) Improved implementation
 
-    python cartooning.py images/stars.jpg -s results/out_paper.jpg -o results/out.jpg
+    python cartooning.py images/whale.jpg -s results/out_paper.jpg -o results/out.jpg
 
 <p float="left">
   <img src="https://drive.google.com/uc?export=view&id=1ln67n4NpgzMpf4ivGk987wXuUTeTYH_Z" width="280" />
