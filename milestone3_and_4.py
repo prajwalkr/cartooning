@@ -1,6 +1,6 @@
 import argparse
 from utils import *
-from milestone1 import apply_median_filter, detect_egdes
+from milestone1 import apply_median_filter, detect_edges_filtered
 from milestone2 import dilation
 
 def apply_bilateral_filter(img):
@@ -14,10 +14,10 @@ def apply_bilateral_filter(img):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Milestone 3 and 4 progress')
     parser.add_argument('input', help='Input image')
-    parser.add_argument('-l', '--edgemin', required=False, default=180, type=int)
-    parser.add_argument('-r', '--edgemax', required=False, default=100, type=int)
-    parser.add_argument('--median_kernel_size', required=False, default=3, type=int)
-    parser.add_argument('-f', '--dilation_size', required=False, default=2, type=int)
+    parser.add_argument('-m', '--median_kernel_size', required=False, default=7, 
+        type=int, help='Increase this value to reduce no. of edges & get a more smooth output')
+    parser.add_argument('-f', '--dilation_size', required=False, default=2, type=int,
+        help='Increase this value to get thicker edges')
 
     args = parser.parse_args()
         
@@ -30,7 +30,7 @@ if __name__ == '__main__':
     plotImages(img, median_filtered_img, 'Input image', 'Median filtered image')
 
     # Detect the edges in the image and display the images
-    edges = detect_egdes(median_filtered_img, args.edgemin, args.edgemax)
+    edges = detect_edges_filtered(median_filtered_img)
     plotImages(median_filtered_img, edges, 'Median filtered image', 'Edge detection')
 
     # Dilate the image

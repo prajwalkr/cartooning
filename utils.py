@@ -52,6 +52,10 @@ def plotImages(im1, im2, t1, t2):
 	return
 
 def get_points_within_contour(img, points, display=False):
+	'''
+		returns a binary mask with the pixels inside the contour 
+		of a given set of points denoted by 1
+	'''
 	if len(img.shape) > 2:
 		img = img[..., 0]
 		expand_dims = True
@@ -66,6 +70,31 @@ def get_points_within_contour(img, points, display=False):
 
 	return mask // 255
 
+####### improvements
+
+def threshold_edges(img, args):
+	## Replacement function for Canny ----> Adaptive Thresholding 
+	## to get thick prominent edges
+
+	img_gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+	img_blur = cv2.medianBlur(img_gray, args.median_kernel_size)
+
+	# detect and enhance edges
+	img_edge = cv2.adaptiveThreshold(img_blur, 255,
+								cv2.ADAPTIVE_THRESH_MEAN_C,
+								cv2.THRESH_BINARY,
+								blockSize=args.blockSize,
+								C=args.C)
+
+	img_edge = cv2.medianBlur(img_edge, args.reduce_speckles)
+
+	img_edge = cv2.cvtColor(img_edge, cv2.COLOR_GRAY2RGB)
+
+	# merge using bitwise and
+	img_cartoon = cv2.bitwise_and(img, img_edge)
+
+	return img_cartoon, img_edge
+
 def KMeansClustering(img, n_clusters):
     (h, w) = img.shape[:2]
 
@@ -73,16 +102,16 @@ def KMeansClustering(img, n_clusters):
     # The KMeans uses Euclidean distance and the Euclidean distance in LAB color space 
     # implies perceptul meaning.
     img = cv2.cvtColor(img, cv2.COLOR_RGB2LAB)
-     
+    
     # Reshape the image into a feature vector to apply k-means
     img = img.reshape((img.shape[0] * img.shape[1], 3))
      
     # Apply KMeans using the specified number of clusters 
-    kmeans = MiniBatchKMeans(n_clusters = n_clusters)
+    kmeans = MiniBatchKMeans(n_clusters=n_clusters)
     labels = kmeans.fit_predict(img)
 
     # Generate the quantized image based on the predictions
-    clustered_img = kmeans.cluster_centers_.astype("uint8")[labels]
+    clustered_img = kmeans.cluster_centers_.astype(np.uint8)[labels]
      
     # Reshape the feature vectors to images
     clustered_img = clustered_img.reshape((h, w, 3))
