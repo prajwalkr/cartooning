@@ -1,6 +1,6 @@
 attrs==19.3.0
 backcall==0.1.0
-bleach==3.1.0
+bleach==3.1.1
 cmake==3.15.3
 cvxopt==1.2.3
 cycler==0.10.0
